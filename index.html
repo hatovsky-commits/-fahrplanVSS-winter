@@ -1,62 +1,313 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#101a25">
-<meta name="description" content="Vienna Sightseeing Winter timetable – next departures by stop and line.">
-<title>Next Bus · Vienna Sightseeing Winter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07182d">
+<meta name="description" content="Vienna Sightseeing Winter Next Bus — live countdowns and winter timetable.">
+<title>Vienna Sightseeing · Winter Next Bus</title>
 <style>
-:root{color-scheme:dark;--bg:#101a25;--panel:#192735;--panel2:#213344;--line:#34495b;--text:#f4f7fb;--sub:#a8b7c5;--muted:#72869a;--blue:#20acef;--red:#f04f54;--yellow:#f6c73f;--accent:#f6c73f;--radius:20px}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse 130% 440px at 50% -30%,#29475c 0,transparent 78%),var(--bg);color:var(--text);font:16px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
-.wrap{max-width:760px;margin:auto;padding:12px 15px calc(36px + env(safe-area-inset-bottom))}.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.brand{display:flex;align-items:center;gap:9px;font-weight:850;letter-spacing:.01em}.logo{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--yellow);color:#14202a;font-weight:950;font-size:19px;transform:rotate(-5deg)}.version{font-size:.68rem;color:#f8dc8a;border:1px solid #725f2d;background:#3a321c;border-radius:999px;padding:5px 9px;font-weight:750;white-space:nowrap}
-.card{background:linear-gradient(155deg,rgba(31,48,64,.97),rgba(23,36,49,.98));border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 14px 38px #0002}.search{padding:15px;margin-bottom:12px}.clockrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.clock{font-size:1.55rem;font-weight:850;letter-spacing:-.04em;font-variant-numeric:tabular-nums}.date{font-size:.76rem;color:var(--sub);text-align:right}.label{display:block;font-size:.8rem;font-weight:750;color:#d5e0e9;margin-bottom:7px}.inputrow{display:flex;gap:8px}.inputwrap{position:relative;flex:1}.inputwrap:before{content:'⌕';position:absolute;left:17px;top:50%;transform:translateY(-54%);font-size:1.8rem;color:#8197aa;pointer-events:none}input{width:100%;height:58px;border-radius:14px;border:1px solid #43596b;background:#0d1822;color:white;padding:0 15px 0 51px;font-size:1.8rem;font-weight:850;outline:none;font-variant-numeric:tabular-nums}input:focus{border-color:var(--yellow);box-shadow:0 0 0 2px #f6c73f2b}.clear{width:54px;border:0;border-radius:13px;background:#2a4052;color:#e7eef5;font-size:1.4rem}.quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.quick button{min-width:42px;padding:8px 12px;border:1px solid #40576a;border-radius:10px;background:#253a4c;color:#f2f6fa;font-weight:850;font-size:.95rem}.quick button:active,.clear:active{transform:scale(.96)}
-.notice{padding:11px 13px;margin:0 0 12px;border-radius:13px;background:#2a281d;border:1px solid #66562b;color:#e8d99f;font-size:.79rem}.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:17px 2px 9px}.sectionhead h2{font-size:.95rem;margin:0;font-weight:850}.sectionhead span{font-size:.72rem;color:var(--sub)}.line-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.line-btn{display:flex;align-items:stretch;gap:10px;text-align:left;padding:12px 10px;min-height:112px;border:1px solid #405466;border-radius:14px;background:#152431;color:var(--text);min-width:0}.line-btn[aria-pressed=true]{border-color:var(--c);background:color-mix(in srgb,var(--c),#152431 90%)}.swatch{width:7px;min-height:48px;border-radius:8px;background:var(--c);flex:none}.linecopy{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}.linetitle{font-size:.79rem;font-weight:850}.nexttime{font-size:1.75rem;font-weight:900;letter-spacing:-.06em;line-height:1.25;font-variant-numeric:tabular-nums;white-space:nowrap}.wait{font-size:.72rem;font-weight:850;color:var(--c)}.stopname{font-size:.68rem;color:#bdcbd7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.buscode{display:inline-flex;align-items:center;border:1px solid color-mix(in srgb,var(--c),transparent 45%);background:color-mix(in srgb,var(--c),transparent 88%);color:var(--c);padding:2px 6px;border-radius:6px;font-size:.65rem;font-weight:900;vertical-align:middle}
-.result{margin-top:12px;padding:15px;--active:var(--yellow);position:relative;overflow:hidden}.result:before{content:'';position:absolute;inset:0 0 auto;height:4px;background:var(--active)}.resulttop{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}.routepill{display:inline-flex;align-items:center;gap:8px;border:1px solid color-mix(in srgb,var(--active),transparent 45%);border-radius:999px;padding:6px 10px;color:var(--active);font-size:.78rem;font-weight:850}.routepill:before{content:'';width:8px;height:8px;border-radius:50%;background:var(--active)}.stoplabel{font-size:.76rem;color:#f4d77d;font-weight:850}.stopheading{font-size:1.2rem;font-weight:850;margin:0 0 4px}.subnote{font-size:.76rem;color:var(--sub)}.timeline{display:flex;gap:8px;overflow-x:auto;padding:8px 2px 12px;scroll-snap-type:x mandatory;scrollbar-width:thin}.departure{flex:0 0 104px;scroll-snap-align:start;border:1px solid #3c5265;border-radius:13px;background:#132230;padding:10px 9px;text-align:center;font-variant-numeric:tabular-nums}.departure.current{border:1px solid var(--active);background:color-mix(in srgb,var(--active),#142331 90%);box-shadow:0 0 0 1px color-mix(in srgb,var(--active),transparent 70%)}.departure .time{font-size:1.35rem;font-weight:900;letter-spacing:-.04em}.departure .count{font-size:.69rem;color:var(--sub);margin-top:2px}.departure .bus{margin-top:7px}.alltimes{margin-top:9px;border-top:1px solid #35495a;padding-top:11px}.alltimes summary{font-size:.79rem;font-weight:800;color:#dbe5ed;cursor:pointer}.alllist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px}.allitem{padding:8px 5px;text-align:center;border-radius:9px;background:#132230;border:1px solid #304658;font-variant-numeric:tabular-nums}.allitem strong{display:block;font-size:.95rem}.allitem small{font-size:.65rem;color:var(--sub)}.empty{padding:18px;text-align:center;color:var(--sub);font-size:.86rem}.footer{text-align:center;color:#7e91a3;font-size:.69rem;padding:17px 4px 0}.hidden{display:none!important}
-@media(max-width:390px){.wrap{padding-left:11px;padding-right:11px}.line-options{gap:7px}.line-btn{padding:10px 8px;gap:7px}.nexttime{font-size:1.55rem}.departure{flex-basis:96px}.alllist{grid-template-columns:repeat(3,minmax(0,1fr))}}
+:root{
+  color-scheme:dark;
+  --bg:#061426;--bg2:#0a2039;--panel:rgba(16,42,68,.72);--panel2:rgba(21,54,83,.62);
+  --line:rgba(173,220,255,.15);--text:#f2f8ff;--muted:#9db5cb;--ice:#9fe3ff;--ice2:#54b9ee;
+  --blue:#20acef;--red:#f04f54;--yellow:#f6c73f;--good:#8de5c0;--shadow:0 18px 55px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--bg);scroll-behavior:smooth}
+body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);
+ background:radial-gradient(ellipse at 50% -12%,#17436a 0%,transparent 48%),radial-gradient(circle at 8% 35%,rgba(50,139,192,.13),transparent 30%),linear-gradient(160deg,#07182d 0%,#081b31 55%,#061426 100%);overflow-x:hidden}
+button,input{font:inherit}
+button{color:inherit}
+#snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.72}
+.app{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:clamp(14px,3vw,28px) clamp(12px,3vw,22px) 40px}
+.glass{background:linear-gradient(145deg,rgba(20,53,82,.78),rgba(9,30,51,.72));border:1px solid var(--line);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:22px}
+header{padding:18px 20px 16px;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;right:-48px;top:-72px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(127,213,255,.18),transparent 68%);pointer-events:none}
+.brand{display:flex;align-items:center;gap:13px}
+.logo{width:49px;height:49px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,rgba(151,226,255,.22),rgba(48,132,186,.13));border:1px solid rgba(171,229,255,.3);box-shadow:0 0 25px rgba(80,180,232,.12);flex:none}
+.logo svg{width:30px;height:30px;filter:drop-shadow(0 0 7px rgba(146,225,255,.65))}
+.eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#a8dfff;font-weight:800;margin:0 0 4px}
+h1{font-size:clamp(20px,5vw,27px);line-height:1.12;margin:0;font-weight:800;letter-spacing:-.04em}
+.subhead{color:var(--muted);font-size:12px;margin-top:6px}
+.header-right{margin-left:auto;text-align:right;z-index:1}
+.season-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(153,222,255,.23);background:rgba(111,193,235,.1);color:#c5edff;border-radius:99px;padding:7px 10px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.season-pill .dot{width:6px;height:6px;border-radius:50%;background:#8de5c0;box-shadow:0 0 8px #8de5c0}
+.clock-row{display:flex;justify-content:space-between;align-items:center;margin-top:17px;padding-top:13px;border-top:1px solid rgba(180,220,248,.11)}
+.clock-label{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.clock{font-variant-numeric:tabular-nums;font-size:22px;font-weight:750;letter-spacing:.04em;color:#e8f8ff}
+.clock-date{font-size:11px;color:#9cb7cc;margin-left:8px}
+.section{margin-top:15px;padding:17px}
+.section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.section-heading h2{font-size:14px;margin:0;letter-spacing:-.01em}
+.kicker{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:750}
+.search-wrap{display:flex;gap:8px}
+.search-box{display:flex;align-items:center;gap:9px;flex:1;min-width:0;background:rgba(2,15,29,.42);border:1px solid rgba(168,219,250,.2);border-radius:14px;padding:0 13px;transition:border-color .2s,box-shadow .2s}
+.search-box:focus-within{border-color:rgba(120,211,255,.7);box-shadow:0 0 0 3px rgba(78,179,230,.12)}
+.search-box svg{width:17px;height:17px;color:#9bcce8;flex:none}
+.search-box input{width:100%;min-width:0;background:transparent;border:0;outline:0;color:var(--text);padding:13px 0;font-size:15px}
+.search-box input::placeholder{color:#7894ad}
+.go-btn{border:0;border-radius:13px;background:linear-gradient(135deg,#8cddff,#49aee2);color:#062039;font-weight:850;padding:0 19px;cursor:pointer;box-shadow:0 7px 18px rgba(45,158,218,.2)}
+.go-btn:active,.quick button:active{transform:scale(.97)}
+.quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.quick button{min-width:37px;padding:8px 11px;border-radius:10px;border:1px solid rgba(164,214,246,.17);background:rgba(131,190,226,.08);color:#c8e9fb;font-size:12px;font-weight:800;cursor:pointer;transition:.18s}
+.quick button.active,.quick button:hover{background:rgba(113,203,249,.2);border-color:rgba(131,218,255,.55);color:white}
+.stop-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 12px}
+.stop-name{font-size:19px;font-weight:800;letter-spacing:-.03em}
+.stop-number{color:#a8d9f5;font-size:11px;font-weight:800;border:1px solid rgba(158,218,251,.2);border-radius:8px;padding:5px 8px;background:rgba(105,183,226,.08)}
+.line-card{border:1px solid rgba(180,220,248,.12);background:linear-gradient(120deg,rgba(3,17,32,.46),rgba(13,37,60,.4));border-radius:17px;padding:14px;margin-top:10px;position:relative;overflow:hidden}
+.line-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line-color)}
+.line-top{display:flex;align-items:center;gap:8px}
+.line-dot{width:9px;height:9px;border-radius:50%;background:var(--line-color);box-shadow:0 0 12px color-mix(in srgb,var(--line-color),transparent 30%)}
+.line-name{font-size:12px;font-weight:850;letter-spacing:.04em}
+.bus-tag{margin-left:auto;font-size:10px;color:#c0d6e7;background:rgba(160,207,239,.1);border:1px solid rgba(168,215,244,.13);border-radius:7px;padding:4px 7px;font-weight:750}
+.departure-main{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin:10px 0 11px}
+.next-time{font-size:34px;font-weight:850;letter-spacing:-.055em;line-height:1;color:#f5fbff;font-variant-numeric:tabular-nums}
+.countdown{text-align:right;color:#a9c5da;font-size:11px;line-height:1.45}
+.countdown strong{display:block;color:#9fe3ff;font-size:19px;font-variant-numeric:tabular-nums}
+.no-departure{font-size:13px;color:#b2c5d5;padding:12px 0 5px}
+.timeline-label{font-size:9px;color:#829fb8;letter-spacing:.12em;text-transform:uppercase;font-weight:800;margin:2px 0 7px}
+.timeline{display:flex;gap:7px;overflow-x:auto;padding:2px 1px 8px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:rgba(145,202,237,.35) transparent;-webkit-overflow-scrolling:touch}
+.departure-chip{flex:0 0 auto;min-width:66px;text-align:center;padding:8px 9px;border-radius:10px;border:1px solid rgba(165,210,239,.13);background:rgba(141,190,222,.07);scroll-snap-align:start}
+.departure-chip strong{display:block;font-size:12px;font-variant-numeric:tabular-nums}
+.departure-chip small{display:block;font-size:9px;color:#8da9bf;margin-top:3px}
+.departure-chip.next{border-color:rgba(153,226,255,.65);background:rgba(96,190,238,.18);box-shadow:inset 0 0 15px rgba(113,201,245,.08)}
+.departure-chip.next strong{color:#c5f0ff}
+.details{margin-top:10px}
+details summary{list-style:none;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:#b6d8ee;font-size:11px;font-weight:750;padding:9px 2px 2px}
+details summary::-webkit-details-marker{display:none}
+details summary:after{content:"＋";font-size:16px;color:#9fdefd}
+details[open] summary:after{content:"−"}
+.all-times{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:7px;padding-top:11px}
+.time-item{background:rgba(2,15,28,.3);border:1px solid rgba(160,207,239,.1);border-radius:9px;padding:8px;text-align:center}
+.time-item strong{font-size:12px;display:block;font-variant-numeric:tabular-nums}
+.time-item small{font-size:9px;color:#8da9bf}
+.status{margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(128,201,239,.08);border:1px solid rgba(144,213,248,.12);color:#a9c8dd;font-size:11px;line-height:1.5}
+.status.error{color:#ffd1d1;border-color:rgba(240,79,84,.35);background:rgba(240,79,84,.08)}
+.status.good{color:#b9f4dc}
+footer{text-align:center;color:#6f8ca5;font-size:10px;padding:20px 10px 0;line-height:1.7}
+footer strong{color:#9bcde9;font-weight:700}
+.hidden{display:none!important}
+@media(min-width:620px){.section{padding:19px}.line-card{padding:16px}.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.line-card{margin-top:0}.cards-grid .line-card{min-width:0}}
+@media(max-width:390px){header{padding:15px}.season-pill{font-size:9px;padding:6px 8px}.brand{gap:10px}.logo{width:43px;height:43px}.clock{font-size:20px}.section{padding:14px}.go-btn{padding:0 14px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}#snow{display:none}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top"><div class="brand"><span class="logo">V</span><span>Vienna <b>Next Bus</b></span></div><span class="version">WINTER · 02.11–24.12.2026</span></header>
-  <section class="card search">
-    <div class="clockrow"><div class="clock" id="clock">--:--:--</div><div class="date" id="date">Vienna time</div></div>
-    <label class="label" for="stopInput">HALTESTELLENNUMMER</label>
-    <div class="inputrow"><div class="inputwrap"><input id="stopInput" type="number" inputmode="numeric" min="1" max="99" placeholder="z. B. 13" autocomplete="off"></div><button class="clear" id="clearBtn" aria-label="Clear">×</button></div>
-    <div class="quick"><button data-stop="1">1</button><button data-stop="2">2</button><button data-stop="47">47</button><button data-stop="12">12</button><button data-stop="13">13</button><button data-stop="30">30</button><button data-stop="31">31</button></div>
-  </section>
-  <div class="notice" id="validity">Loading winter timetable…</div>
-  <section id="lineSection" class="hidden"><div class="sectionhead"><h2>Available lines</h2><span>Choose a line</span></div><div id="lineOptions" class="line-options"></div></section>
-  <section id="result" class="card result hidden"><div class="resulttop"><span id="routePill" class="routepill">Blue Line</span><span id="stopLabel" class="stoplabel">STOP 1</span></div><h1 id="stopHeading" class="stopheading">Staatsoper</h1><div id="note" class="subnote"></div><div class="sectionhead"><h2>Next departures</h2><span id="remaining"></span></div><div id="timeline" class="timeline"></div><details class="alltimes"><summary>Show all departures today</summary><div id="allList" class="alllist"></div></details></section>
-  <div id="empty" class="card empty hidden">No timetable found for this stop number.</div>
-  <footer class="footer">Vienna Sightseeing · Winter timetable 2026 · Monday–Sunday<br>Green Line, Night Tour and Mozart on Tour are not included.</footer>
-</div>
+<canvas id="snow" aria-hidden="true"></canvas>
+<main class="app">
+<header class="glass">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#b9edff" stroke-width="2.2" stroke-linecap="round">
+        <path d="M24 4v40M6.7 14l34.6 20M6.7 34L41.3 14"/>
+        <path d="m24 4-4 5m4-5 4 5m-4 35-4-5m4 5 4-5M6.7 14l6.4.2m-6.4-.2 2.1 6m32.5 14-6.4-.2m6.4.2-2.1-6M6.7 34l2.1-6m-2.1 6 6.4-.2M41.3 14l-2.1 6m2.1-6-6.4.2"/>
+      </svg>
+    </div>
+    <div>
+      <p class="eyebrow">Vienna Sightseeing</p>
+      <h1>Winter Next Bus</h1>
+      <div class="subhead">Your next city tour, at a glance</div>
+    </div>
+    <div class="header-right"><span class="season-pill"><i class="dot"></i> Winter 2026</span></div>
+  </div>
+  <div class="clock-row">
+    <div><div class="clock-label">Vienna local time</div><div class="subhead">Live departure information</div></div>
+    <div style="text-align:right"><span class="clock" id="clock">--:--:--</span><div class="clock-date" id="clockDate">Loading date…</div></div>
+  </div>
+</header>
+
+<section class="section glass" aria-labelledby="findTitle">
+  <div class="section-heading"><h2 id="findTitle">Find your bus stop</h2><span class="kicker">Stop number</span></div>
+  <div class="search-wrap">
+    <label class="search-box" for="stopInput">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+      <input id="stopInput" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter stop number…" aria-label="Enter bus stop number">
+    </label>
+    <button class="go-btn" id="searchBtn">Search</button>
+  </div>
+  <div class="quick" aria-label="Quick select stops">
+    <button data-stop="1">1</button><button data-stop="2">2</button><button data-stop="47">47</button>
+    <button data-stop="12">12</button><button data-stop="13">13</button><button data-stop="30">30</button><button data-stop="31">31</button>
+  </div>
+</section>
+
+<section class="section glass" id="resultsSection" aria-live="polite">
+  <div class="section-heading"><h2>Next departures</h2><span class="kicker" id="validityLabel">Winter timetable</span></div>
+  <div id="stopMeta" class="stop-meta hidden"><div class="stop-name" id="stopName"></div><span class="stop-number" id="stopNumber"></span></div>
+  <div id="cards" class="cards-grid"></div>
+  <div id="status" class="status">Loading Winter timetable…</div>
+</section>
+<footer>
+  <strong>❄ Vienna Sightseeing · Winter 2026/27</strong><br>
+  Timetable validity: 02 Nov – 24 Dec 2026 · All times Vienna local time
+</footer>
+</main>
 <script>
-'use strict';
-const TZ='Europe/Vienna';
-const $=id=>document.getElementById(id);
-let DATA=null, selectedStop='', selectedLine=null;
-const lineOrder=['blue','red','yellow'];
-function vienna(){const parts=new Intl.DateTimeFormat('en-GB',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',weekday:'short',hourCycle:'h23'}).formatToParts(new Date());return Object.fromEntries(parts.map(p=>[p.type,p.value]));}
-function mins(t){const [h,m]=t.split(':').map(Number);return h*60+m;}
-function validToday(v){const iso=`${v.year}-${v.month}-${v.day}`;return iso>=DATA.validFrom&&iso<=DATA.validTo;}
-function setClock(){const v=vienna();$('clock').textContent=`${v.hour}:${v.minute}:${v.second}`;$('date').textContent=`${v.weekday} · ${v.day}.${v.month}.${v.year}`;if(DATA){const ok=validToday(v);$('validity').textContent=ok?`Winter timetable active · Valid ${formatDate(DATA.validFrom)} – ${formatDate(DATA.validTo)} · All lines operate Monday–Sunday.`:`Timetable valid ${formatDate(DATA.validFrom)} – ${formatDate(DATA.validTo)}. ${`${v.year}-${v.month}-${v.day}`<DATA.validFrom?'Winter plan has not started yet.':'This winter plan has expired.'}`;if(selectedStop)render();}}
-function formatDate(iso){return iso.split('-').reverse().join('.');}
-function getNow(){const v=vienna();return {minute:Number(v.hour)*60+Number(v.minute),iso:`${v.year}-${v.month}-${v.day}`};}
-function lineColor(line){return DATA.lines[line].color;}
-function nextFor(stop,line,now){const list=stop.lines[line]||[];return list.find(d=>mins(d.time)>=now.minute)||null;}
-function waitLabel(time,now){const d=mins(time)-now.minute;return d<=0?'NOW':`in ${d} min`}
-function render(){if(!DATA||!selectedStop)return;const stop=DATA.stops[selectedStop];if(!stop){$('lineSection').classList.add('hidden');$('result').classList.add('hidden');$('empty').classList.remove('hidden');return;}$('empty').classList.add('hidden');const available=lineOrder.filter(l=>stop.lines[l]);const now=getNow();$('lineSection').classList.toggle('hidden',available.length<2);$('lineOptions').replaceChildren();
-  if(available.length>1){available.forEach(line=>{const next=nextFor(stop,line,now);const b=document.createElement('button');b.className='line-btn';b.style.setProperty('--c',lineColor(line));b.setAttribute('aria-pressed',String(selectedLine===line));const sw=document.createElement('span');sw.className='swatch';const cp=document.createElement('span');cp.className='linecopy';const title=document.createElement('span');title.className='linetitle';title.textContent=DATA.lines[line].de;const time=document.createElement('span');time.className='nexttime';time.textContent=next?next.time:'–:–';const wait=document.createElement('span');wait.className='wait';wait.textContent=next?waitLabel(next.time,now):'No more departures';const nm=document.createElement('span');nm.className='stopname';nm.textContent=stop.name;cp.append(title,time,wait,nm);b.append(sw,cp);b.addEventListener('click',()=>{selectedLine=line;render();$('result').scrollIntoView({behavior:'smooth',block:'nearest'});});$('lineOptions').append(b);});}
-  if(!selectedLine||!stop.lines[selectedLine])selectedLine=available[0];if(!selectedLine){$('result').classList.add('hidden');return;}const color=lineColor(selectedLine);$('result').style.setProperty('--active',color);$('routePill').textContent=DATA.lines[selectedLine].de;$('stopLabel').textContent=`STOP ${selectedStop}`;$('stopHeading').textContent=stop.name;$('note').textContent='';
-  const departures=stop.lines[selectedLine];const future=departures.filter(d=>mins(d.time)>=now.minute);$('remaining').textContent=`${future.length} remaining`;$('timeline').replaceChildren();const show=future.slice(0,12);if(!show.length){const e=document.createElement('div');e.className='empty';e.textContent='No more departures today.';$('timeline').append(e);}else show.forEach((d,i)=>{const card=document.createElement('div');card.className='departure'+(i===0?' current':'');const t=document.createElement('div');t.className='time';t.textContent=d.time;const w=document.createElement('div');w.className='count';w.textContent=i===0?waitLabel(d.time,now):`+${mins(d.time)-now.minute} min`;const bus=document.createElement('div');bus.className='bus';const code=document.createElement('span');code.className='buscode';code.textContent=d.bus;code.style.setProperty('--c',color);bus.append(code);card.append(t,w,bus);$('timeline').append(card);});
-  $('allList').replaceChildren();departures.filter(d=>mins(d.time)>=now.minute).forEach(d=>{const item=document.createElement('div');item.className='allitem';const t=document.createElement('strong');t.textContent=d.time;const c=document.createElement('small');c.textContent=d.bus;item.append(t,c);$('allList').append(item);});$('result').classList.remove('hidden');
+(() => {
+"use strict";
+const DATA_URL = "./timetable.json";
+const QUICK_STOPS = ["1","2","47","12","13","30","31"];
+const LINE_ORDER = ["blue","red","yellow"];
+const $ = id => document.getElementById(id);
+let timetable = null, selectedStop = null, timer = null;
+
+const fmtParts = () => {
+  const p = new Intl.DateTimeFormat("en-CA", {
+    timeZone:"Europe/Vienna", year:"numeric",month:"2-digit",day:"2-digit",
+    hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"
+  }).formatToParts(new Date());
+  return Object.fromEntries(p.filter(x=>x.type!=="literal").map(x=>[x.type,x.value]));
+};
+const viennaNow = () => {
+  const p=fmtParts();
+  return {date:`${p.year}-${p.month}-${p.day}`,hour:+p.hour,minute:+p.minute,second:+p.second,
+          minutes:+p.hour*60 + +p.minute + +p.second/60};
+};
+const dateUTC = s => new Date(s+"T00:00:00Z");
+const inValidity = date => date >= timetable.validFrom && date <= timetable.validTo;
+const weekdayKey = date => ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][dateUTC(date).getUTCDay()];
+const updateClock = () => {
+  const p=fmtParts();
+  $("clock").textContent=`${p.hour}:${p.minute}:${p.second}`;
+  $("clockDate").textContent=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Vienna",weekday:"short",day:"2-digit",month:"short",year:"numeric"}).format(new Date());
+};
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function setStatus(message, type=""){$("status").className="status "+type;$("status").textContent=message;}
+function getUpcoming(departures, now){
+  const today=now.date;
+  if(!inValidity(today)) return null;
+  const mins=now.minutes;
+  let candidates=departures.map(d=>{
+    const [h,m]=d.time.split(":").map(Number);
+    return {...d, absolute:h*60+m, delta:h*60+m-mins};
+  }).filter(d=>d.delta>=-0.01);
+  if(candidates.length) return candidates.sort((a,b)=>a.delta-b.delta)[0];
+  // The supplied schedule is valid every day, so the next service is tomorrow.
+  const tomorrow=new Date(dateUTC(today).getTime()+86400000).toISOString().slice(0,10);
+  if(!inValidity(tomorrow)) return null;
+  const first=[...departures].sort((a,b)=>a.time.localeCompare(b.time))[0];
+  if(!first) return null;
+  const [h,m]=first.time.split(":").map(Number);
+  return {...first,absolute:h*60+m,delta:1440-mins+h*60+m,tomorrow:true};
 }
-function chooseStop(no){selectedStop=String(no);selectedLine=null;$('stopInput').value=selectedStop;render();}
-$('stopInput').addEventListener('input',e=>{const value=e.target.value.trim();selectedStop=value;selectedLine=null;if(value.length>0)render();else{$('lineSection').classList.add('hidden');$('result').classList.add('hidden');$('empty').classList.add('hidden');}});
-$('stopInput').addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur();});$('clearBtn').addEventListener('click',()=>{selectedStop='';selectedLine=null;$('stopInput').value='';$('lineSection').classList.add('hidden');$('result').classList.add('hidden');$('empty').classList.add('hidden');$('stopInput').focus();});document.querySelectorAll('[data-stop]').forEach(b=>b.addEventListener('click',()=>chooseStop(b.dataset.stop)));
-async function init(){try{const response=await fetch('./timetable.json',{cache:'no-store'});if(!response.ok)throw new Error(`HTTP ${response.status}`);DATA=await response.json();if(!DATA.lines||!DATA.stops)throw new Error('Invalid timetable format');$('validity').textContent=`Winter timetable loaded · ${formatDate(DATA.validFrom)} – ${formatDate(DATA.validTo)} · Blue, Red and Yellow`;setClock();setInterval(setClock,1000);}catch(err){$('validity').textContent='Could not load timetable.json. Make sure index.html and timetable.json are in the same repository folder and open the app through GitHub Pages.';console.error(err);}}
+function minsLabel(delta){
+  if(delta<=0.5) return "Due now";
+  const n=Math.ceil(delta);
+  if(n<60) return `${n} min`;
+  const h=Math.floor(n/60),m=n%60;
+  return m?`${h}h ${m}m`:`${h}h`;
+}
+function renderLine(lineKey, entries, now){
+  const line=timetable.lines[lineKey];
+  const next=getUpcoming(entries,now);
+  const sorted=[...entries].sort((a,b)=>a.time.localeCompare(b.time));
+  const nextIndex=next?sorted.findIndex(d=>d.time===next.time && d.bus===next.bus):-1;
+  const color=line.color || ({blue:"#20acef",red:"#f04f54",yellow:"#f6c73f"}[lineKey]);
+  const timeline=sorted.map((d,i)=>`<div class="departure-chip ${i===nextIndex?"next":""}">
+    <strong>${esc(d.time)}</strong><small>${esc(d.bus||"—")}</small></div>`).join("");
+  const all=sorted.map(d=>`<div class="time-item"><strong>${esc(d.time)}</strong><small>Bus ${esc(d.bus||"—")}</small></div>`).join("");
+  const nextMarkup=next?`<div class="departure-main">
+    <div><div class="kicker">Next departure</div><div class="next-time">${esc(next.time)}</div></div>
+    <div class="countdown"><strong data-countdown="${Math.max(0,next.delta)}">${minsLabel(next.delta)}</strong>${next.tomorrow?"Tomorrow": "from now"}</div>
+  </div>`:`<div class="no-departure">No further departures in the valid timetable period.</div>`;
+  return `<article class="line-card" style="--line-color:${esc(color)}">
+    <div class="line-top"><span class="line-dot"></span><span class="line-name">${esc(line.label||lineKey+" Line")}</span><span class="bus-tag">${next?"Bus "+esc(next.bus||"—"):"No service"}</span></div>
+    ${nextMarkup}
+    <div class="timeline-label">Upcoming departures · swipe to explore</div>
+    <div class="timeline" aria-label="${esc(line.label||lineKey)} departure timeline">${timeline}</div>
+    <details><summary>View all ${sorted.length} departure times</summary><div class="all-times">${all}</div></details>
+  </article>`;
+}
+function render(){
+  if(!timetable||!selectedStop)return;
+  const stop=timetable.stops[selectedStop];
+  if(!stop){$("stopMeta").classList.add("hidden");$("cards").innerHTML="";setStatus(`Stop ${selectedStop} was not found. Please check the number.`,"error");return;}
+  $("stopMeta").classList.remove("hidden");
+  $("stopName").textContent=stop.name;
+  $("stopNumber").textContent=`STOP ${selectedStop}`;
+  const now=viennaNow();
+  const today=now.date;
+  $("validityLabel").textContent=`${new Date(timetable.validFrom+"T00:00:00Z").toLocaleDateString("en-GB",{day:"2-digit",month:"short",timeZone:"UTC"})} – ${new Date(timetable.validTo+"T00:00:00Z").toLocaleDateString("en-GB",{day:"2-digit",month:"short",timeZone:"UTC"})}`;
+  if(today<timetable.validFrom || today>timetable.validTo){
+    $("cards").innerHTML="";
+    setStatus(`The Winter timetable is valid from ${timetable.validFrom} to ${timetable.validTo}. Current Vienna date: ${today}.`,"");
+    return;
+  }
+  const lines=stop.lines||{};
+  const available=LINE_ORDER.filter(k=>Array.isArray(lines[k])&&lines[k].length);
+  if(!available.length){$("cards").innerHTML="";setStatus("No regular-line departures are listed for this stop.","");return;}
+  $("cards").innerHTML=available.map(k=>renderLine(k,lines[k],now)).join("");
+  const day=weekdayKey(today);
+  const service=timetable.serviceDays||[];
+  setStatus(`${available.length} line${available.length===1?"":"s"} at this stop · ${day} service${service.includes(day)?"":" (service day not listed)"}. All departures use Vienna local time.`,"good");
+}
+function selectStop(value){
+  const stop=String(value||"").trim();
+  if(!stop)return;
+  selectedStop=stop;
+  $("stopInput").value=stop;
+  document.querySelectorAll(".quick button").forEach(b=>b.classList.toggle("active",b.dataset.stop===stop));
+  render();
+}
+function search(){
+  const value=$("stopInput").value.trim();
+  if(!/^\d+$/.test(value)){setStatus("Please enter a valid stop number.","error");return;}
+  if(!timetable?.stops?.[value]){selectedStop=value;render();return;}
+  selectStop(value);
+}
+async function init(){
+  updateClock();setInterval(updateClock,1000);
+  try{
+    const response=await fetch(DATA_URL,{cache:"no-cache"});
+    if(!response.ok)throw new Error(`Could not load timetable.json (${response.status}).`);
+    timetable=await response.json();
+    if(!timetable.stops||!timetable.lines)throw new Error("The timetable JSON has an unexpected structure.");
+    const keys=Object.keys(timetable.lines);
+    if(keys.some(k=>!LINE_ORDER.includes(k)))console.warn("Extra line key found in JSON; only Blue, Red and Yellow are displayed.");
+    $("validityLabel").textContent="Winter timetable";
+    selectStop("1");
+    setInterval(()=>{if(selectedStop)render();},15000);
+  }catch(err){
+    setStatus(`${err.message} Keep index.html and timetable.json together in the same folder. Open the app through GitHub Pages or a local web server (not file://).`,"error");
+    console.error(err);
+  }
+}
+$("searchBtn").addEventListener("click",search);
+$("stopInput").addEventListener("keydown",e=>{if(e.key==="Enter")search();});
+document.querySelectorAll(".quick button").forEach(b=>b.addEventListener("click",()=>selectStop(b.dataset.stop)));
 init();
+
+// Decorative snowfall. It is isolated from interaction and disabled for reduced-motion users.
+(function snowfall(){
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const canvas=$("snow"),ctx=canvas.getContext("2d");
+  if(!ctx)return;
+  let w=0,h=0,flakes=[],raf=0;
+  const count=()=>Math.min(65,Math.max(24,Math.floor(window.innerWidth/17)));
+  function resize(){
+    const dpr=Math.min(window.devicePixelRatio||1,1.5);
+    w=window.innerWidth;h=window.innerHeight;
+    canvas.width=Math.floor(w*dpr);canvas.height=Math.floor(h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    flakes=Array.from({length:count()},()=>({x:Math.random()*w,y:Math.random()*h,r:.7+Math.random()*2.1,v:.35+Math.random()*.8,s:(Math.random()-.5)*.35,a:.22+Math.random()*.5}));
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(const f of flakes){
+      f.y+=f.v;f.x+=f.s+Math.sin(f.y*.012)*.16;
+      if(f.y>h+5){f.y=-5;f.x=Math.random()*w;}
+      if(f.x>w+5)f.x=-5;if(f.x< -5)f.x=w+5;
+      ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(221,245,255,${f.a})`;ctx.fill();
+    }
+    raf=requestAnimationFrame(draw);
+  }
+  resize();draw();
+  window.addEventListener("resize",resize,{passive:true});
+  document.addEventListener("visibilitychange",()=>{if(document.hidden)cancelAnimationFrame(raf);else draw();});
+})();
+})();
 </script>
 </body>
 </html>
