@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "version": 13,
-  "published": "2026-11-01T00:00:00Z",
-  "title": "Vienna Sightseeing Winter Fahrplan",
+  "version": 14,
+  "published": "2026-11-02T00:00:00Z",
+  "title": "Vienna Sightseeing Winter Fahrplan – mit Pausen, Dienstende und Farbwechseln",
   "validFrom": "2026-11-02",
   "validTo": "2026-12-24",
   "timezone": "Europe/Vienna",
@@ -1214,6 +1214,311 @@
     "All regular-line tables are marked Montag-Sonntag (Monday-Sunday).",
     "At stop 1, the departure row is used for the start of each route; arrival rows are not used as departures.",
     "Night Tour and Mozart on Tour are intentionally excluded.",
-    "Green Line is intentionally excluded."
-  ]
+    "Green Line is intentionally excluded.",
+    "Duty status added from printed final arrival rows (Staatsoper Ankunft).",
+    "ENDE arrival times flagged timeInferred=true are estimates, not printed arrival times.",
+    "Red D5 P at 12:00 → Blue 13:00 is a vehicle-code inference, not a printed colour-change marker."
+  ],
+  "dutyRules": {
+    "P": {
+      "label": "PAUSE",
+      "meaning": "P printed in the final arrival row: scheduled vehicle pause. When the next matching scheduled departure is unambiguous, its duration is calculated."
+    },
+    "B/R": {
+      "label": "FARBWECHSEL",
+      "meaning": "Blue duty continues on Red; explicit /R marker."
+    },
+    "B/Y": {
+      "label": "FARBWECHSEL",
+      "meaning": "Blue duty continues on Yellow; explicit /Y marker."
+    },
+    "Y/B": {
+      "label": "FARBWECHSEL",
+      "meaning": "Yellow duty continues on Blue; explicit /B marker."
+    },
+    "P/Y": {
+      "label": "PAUSE + FARBWECHSEL",
+      "meaning": "Pause followed by Yellow; explicit P/Y marker."
+    },
+    "P/B": {
+      "label": "PAUSE + FARBWECHSEL",
+      "meaning": "Pause followed by Blue; explicit P/B marker."
+    },
+    "ENDE": {
+      "label": "OFF DUTY",
+      "meaning": "ENDE is printed in the final terminal row; PDF does not print the actual arrival time for these entries. Times marked timeInferred are estimates."
+    }
+  },
+  "planEvents": [
+    {
+      "line": "blue",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "10:55",
+      "marker": "B/R",
+      "type": "colour_change",
+      "vehicleCode": "D5",
+      "continuation": {
+        "stop": 1,
+        "line": "red",
+        "time": "11:05",
+        "vehicleCode": "D5"
+      },
+      "sourceNote": "10:55/R printed on Blue terminal arrival; Blue → Red at 11:05."
+    },
+    {
+      "line": "blue",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "12:10",
+      "marker": "P",
+      "type": "pause",
+      "vehicleCode": "D2",
+      "sourceNote": "P printed on Blue terminal arrival 12:10; next Blue departure for D2 at 13:30 (80 min)."
+    },
+    {
+      "line": "blue",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "12:40",
+      "marker": "B/Y",
+      "type": "colour_change",
+      "vehicleCode": "D3",
+      "continuation": {
+        "stop": 1,
+        "line": "yellow",
+        "time": "12:50",
+        "vehicleCode": "D3"
+      },
+      "sourceNote": "12:40/Y printed on Blue terminal arrival; Blue → Yellow at 12:50."
+    },
+    {
+      "line": "blue",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "13:10",
+      "marker": "P",
+      "type": "pause",
+      "vehicleCode": "D1",
+      "sourceNote": "P printed on Blue terminal arrival 13:10; next Blue departure for D1 at 14:20 (70 min)."
+    },
+    {
+      "line": "blue",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "14:00",
+      "marker": "P",
+      "type": "pause",
+      "vehicleCode": "D4",
+      "sourceNote": "P printed on Blue terminal arrival 14:00; next Blue departure for D4 at 15:20 (80 min)."
+    },
+    {
+      "line": "blue",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "14:50",
+      "marker": "B/R",
+      "type": "colour_change",
+      "vehicleCode": "D5",
+      "continuation": {
+        "stop": 1,
+        "line": "red",
+        "time": "15:03",
+        "vehicleCode": "D5"
+      },
+      "sourceNote": "14:50/R printed on Blue terminal arrival; Blue → Red at 15:03."
+    },
+    {
+      "line": "blue",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "16:50",
+      "marker": "ENDE",
+      "type": "end_duty",
+      "vehicleCode": "D3",
+      "timeInferred": true,
+      "precedingTime": "16:44",
+      "sourceNote": "ENDE printed without time in D3 column. Estimated 16:50 from Blue stop 15 at 16:44 + 6 minutes."
+    },
+    {
+      "line": "blue",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "17:10",
+      "marker": "ENDE",
+      "type": "end_duty",
+      "vehicleCode": "D4",
+      "timeInferred": true,
+      "precedingTime": "17:04",
+      "sourceNote": "ENDE printed without time in D4 column. Estimated 17:10 from Blue stop 15 at 17:04 + 6 minutes."
+    },
+    {
+      "line": "blue",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "17:30",
+      "marker": "ENDE",
+      "type": "end_duty",
+      "vehicleCode": "D2",
+      "timeInferred": true,
+      "precedingTime": "17:24",
+      "sourceNote": "ENDE printed without time in D2 column. Estimated 17:30 from Blue stop 15 at 17:24 + 6 minutes."
+    },
+    {
+      "line": "red",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "11:00",
+      "marker": "P",
+      "type": "pause",
+      "vehicleCode": "R1",
+      "sourceNote": "P printed on Red terminal arrival 11:00; next Red departure R1 at 12:00 (60 min)."
+    },
+    {
+      "line": "red",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "12:00",
+      "marker": "P",
+      "type": "pause",
+      "vehicleCode": "D5",
+      "continuation": {
+        "stop": 1,
+        "line": "blue",
+        "time": "13:00",
+        "vehicleCode": "D5"
+      },
+      "sourceNote": "P printed on Red terminal arrival 12:00. Next D5 appears on Blue at 13:00; Red → Blue is inferred from the matching code, not explicitly marked in the PDF."
+    },
+    {
+      "line": "red",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "15:00",
+      "marker": "P/Y",
+      "type": "pause",
+      "vehicleCode": "R1",
+      "continuation": {
+        "stop": 1,
+        "line": "yellow",
+        "time": "16:00",
+        "vehicleCode": "R1"
+      },
+      "sourceNote": "P/Y printed on Red terminal arrival 15:00; R1 continues Yellow at 16:00 (60 min pause and line change)."
+    },
+    {
+      "line": "red",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "17:00",
+      "marker": "ENDE",
+      "type": "end_duty",
+      "vehicleCode": "D5",
+      "timeInferred": true,
+      "precedingTime": "16:53",
+      "sourceNote": "ENDE printed without time in final Red D5 column. Estimated 17:00 from Red stop 4 at 16:53 + 7 minutes."
+    },
+    {
+      "line": "yellow",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "10:40",
+      "marker": "P",
+      "type": "pause",
+      "vehicleCode": "S1",
+      "sourceNote": "P printed on Yellow terminal arrival 10:40; next Yellow departure S1 at 12:10 (90 min)."
+    },
+    {
+      "line": "yellow",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "12:00",
+      "marker": "Y/B",
+      "type": "colour_change",
+      "vehicleCode": "D4",
+      "continuation": {
+        "stop": 1,
+        "line": "blue",
+        "time": "12:10",
+        "vehicleCode": "D4"
+      },
+      "sourceNote": "12:00/B printed on Yellow terminal arrival; Yellow → Blue at 12:10."
+    },
+    {
+      "line": "yellow",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "12:40",
+      "marker": "P",
+      "type": "pause",
+      "vehicleCode": "S2",
+      "sourceNote": "P printed on Yellow terminal arrival 12:40; next Yellow departure S2 at 14:10 (90 min)."
+    },
+    {
+      "line": "yellow",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "14:00",
+      "marker": "P/B",
+      "type": "pause_bus_change",
+      "vehicleCode": "D3",
+      "continuation": {
+        "stop": 1,
+        "line": "blue",
+        "time": "15:00",
+        "vehicleCode": "D3"
+      },
+      "sourceNote": "14:00/P/B printed on Yellow terminal arrival; D3 resumes Blue at 15:00 after 60 min."
+    },
+    {
+      "line": "yellow",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "15:50",
+      "marker": "ENDE",
+      "type": "end_duty",
+      "vehicleCode": "S1",
+      "timeInferred": true,
+      "precedingTime": "15:42",
+      "sourceNote": "ENDE printed without time in S1 column. Estimated 15:50 from Yellow stop 35 at 15:42 + 8 minutes."
+    },
+    {
+      "line": "yellow",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "16:35",
+      "marker": "ENDE",
+      "type": "end_duty",
+      "vehicleCode": "S2",
+      "timeInferred": true,
+      "precedingTime": "16:27",
+      "sourceNote": "ENDE printed without time in S2 column. Estimated 16:35 from Yellow stop 35 at 16:27 + 8 minutes."
+    },
+    {
+      "line": "yellow",
+      "stop": 1,
+      "stopName": "Staatsoper (Ankunft)",
+      "time": "17:10",
+      "marker": "ENDE",
+      "type": "end_duty",
+      "vehicleCode": "R1",
+      "timeInferred": true,
+      "precedingTime": "17:02",
+      "sourceNote": "ENDE printed without time in R1 column. Estimated 17:10 from Yellow stop 35 at 17:02 + 8 minutes."
+    }
+  ],
+  "audit": {
+    "source": "Busfahrplan Lowseason 26-27.pdf, timetable 02.11.–24.12.2026, three regular-line tables (Monday–Sunday)",
+    "excluded": [
+      "Night Tour",
+      "Mozart on Tour",
+      "Green Line"
+    ],
+    "printedTerminalMarkers": "Arrival at stop 1 (Staatsoper) of Blue, Red, Yellow lines",
+    "timeInferredCount": 7,
+    "inferenceMethod": "For ENDE entries with no printed clock, estimate using last printed stop 15/4/35 time plus the travel gap from the same line’s earlier terminal trips (Blue +6m; Red +7m; Yellow +8m).",
+    "unmarkedContinuation": "Red D5 at 12:00 has P, not a printed colour-change marker. Matching D5 on Blue at 13:00 suggests continuation; inferred and flagged in the sourceNote.",
+    "nightTourNote": "Blue D1 terminal 16:30 has an NT mark in the source. No NT or Mozart event/route is included in this JSON.",
+    "departureData": "All 28 stops and every existing regular-line departure time and bus code copied unchanged from supplied timetable (2).json."
+  }
 }
