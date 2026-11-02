@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "version": 17,
+  "version": 18,
   "published": "2026-11-02T00:00:00Z",
-  "title": "Vienna Sightseeing Winter Fahrplan – Pausen, Farbwechsel, Off Duty & NT D1 am Endhalt",
+  "title": "Vienna Sightseeing Winter Fahrplan – Status nur bei Ankunft",
   "validFrom": "2026-11-02",
   "validTo": "2026-12-24",
   "timezone": "Europe/Vienna",
@@ -1238,11 +1238,11 @@
     },
     "P/Y": {
       "label": "PAUSE + FARBWECHSEL",
-      "meaning": "Pause followed by Yellow; explicit P/Y marker."
+      "meaning": "Pause and Red → Yellow change shown together ONLY on the Red terminal arrival (Ankunft) event, not on the later Yellow departure."
     },
     "P/B": {
       "label": "PAUSE + FARBWECHSEL",
-      "meaning": "Pause followed by Blue; explicit P/B marker."
+      "meaning": "Pause and Yellow → Blue change shown together ONLY on the Yellow terminal arrival (Ankunft) event, not on the later Blue departure."
     },
     "ENDE": {
       "label": "OFF DUTY",
@@ -1250,7 +1250,7 @@
     },
     "NT": {
       "label": "NT · NIGHT TOUR",
-      "meaning": "Show the D1 Night Tour moon/status icon ONLY on the Blue Line terminal arrival event at Staatsoper stop 1 at 16:10, labeled NT 16:30. The 14:20 D1 Blue departure must NEVER show NT. Night Tour itself is not a normal sightseeing departure."
+      "meaning": "D1 Night Tour icon ONLY at the Blue Line station 1 arrival event at 16:10, showing NT 16:30. No NT markers on departures or intermediate stops."
     }
   },
   "planEvents": [
@@ -1534,6 +1534,8 @@
     "inferenceMethod": "For ENDE entries with no printed clock, estimate using last printed stop 15/4/35 time plus the travel gap from the same line’s earlier terminal trips (Blue +6m; Red +7m; Yellow +8m).",
     "unmarkedContinuation": "Red D5 at 12:00 has P, not a printed colour-change marker. Matching D5 on Blue at 13:00 suggests continuation; inferred and flagged in the sourceNote.",
     "nightTourNote": "D1: Blue Line stop 1 departure 14:20 (no NT badge); terminal arrival at 16:10 (only NT badge, indicating separate Night Tour departure at 16:30). Event must not propagate by vehicle code across other stop1 trips.",
-    "departureData": "All 28 stops and every existing regular-line departure time and bus code copied unchanged from supplied timetable (2).json."
+    "departureData": "All 28 stops and every existing regular-line departure time and bus code copied unchanged from supplied timetable (2).json.",
+    "statusPlacement": "Pause, Farbwechsel, OFF DUTY und NT nur auf den ausdrücklich angegebenen Ankunftsereignissen (Staatsoper Haltestelle 1). Kein Status auf den regulären Abfahrten oder auf der Anschlussfahrt. Bei P/Y und P/B erscheinen Pause und Farbwechsel gemeinsam am Ankunftsereignis.",
+    "arrivalOnlyVersion": "v18"
   }
 }
