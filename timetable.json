@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "version": 14,
+  "version": 15,
   "published": "2026-11-02T00:00:00Z",
-  "title": "Vienna Sightseeing Winter Fahrplan – mit Pausen, Dienstende und Farbwechseln",
+  "title": "Vienna Sightseeing Winter Fahrplan – Pausen, Farbwechsel, Off Duty und NT D1",
   "validFrom": "2026-11-02",
   "validTo": "2026-12-24",
   "timezone": "Europe/Vienna",
@@ -1213,7 +1213,7 @@
   "notes": [
     "All regular-line tables are marked Montag-Sonntag (Monday-Sunday).",
     "At stop 1, the departure row is used for the start of each route; arrival rows are not used as departures.",
-    "Night Tour and Mozart on Tour are intentionally excluded.",
+    "Night Tour and Mozart on Tour schedules are excluded; only the D1 Night Tour (NT) duty-status marker at 16:30 is shown.",
     "Green Line is intentionally excluded.",
     "Duty status added from printed final arrival rows (Staatsoper Ankunft).",
     "ENDE arrival times flagged timeInferred=true are estimates, not printed arrival times.",
@@ -1247,6 +1247,10 @@
     "ENDE": {
       "label": "OFF DUTY",
       "meaning": "ENDE is printed in the final terminal row; PDF does not print the actual arrival time for these entries. Times marked timeInferred are estimates."
+    },
+    "NT": {
+      "label": "NT · NIGHT TOUR",
+      "meaning": "D1 will operate the 16:30 Night Tour departure from Staatsoper, as printed in the separate Night Tour table. This is operational status and is not a Blue/Red/Yellow passenger departure. Night Tour stops and Mozart route are excluded."
     }
   },
   "planEvents": [
@@ -1505,12 +1509,28 @@
       "timeInferred": true,
       "precedingTime": "17:02",
       "sourceNote": "ENDE printed without time in R1 column. Estimated 17:10 from Yellow stop 35 at 17:02 + 8 minutes."
+    },
+    {
+      "line": "blue",
+      "stop": 1,
+      "stopName": "Staatsoper (Abfahrt)",
+      "time": "16:30",
+      "marker": "NT",
+      "type": "night_tour",
+      "vehicleCode": "D1",
+      "nightTourDeparture": "16:30",
+      "linkedRegularTrip": {
+        "line": "blue",
+        "vehicleCode": "D1",
+        "selector": "last_before_tour"
+      },
+      "sourceNote": "Night Tour table on PDF shows S1;D1 and a 16:30 departure from Staatsoper. Blue D1 arrives at Staatsoper at 16:10, then operates the Night Tour at 16:30. NT is a duty-status marker only; the Night Tour route is not included in regular-line departures."
     }
   ],
   "audit": {
     "source": "Busfahrplan Lowseason 26-27.pdf, timetable 02.11.–24.12.2026, three regular-line tables (Monday–Sunday)",
     "excluded": [
-      "Night Tour",
+      "Night Tour route / intermediate stops (except D1 status marker)",
       "Mozart on Tour",
       "Green Line"
     ],
@@ -1518,7 +1538,7 @@
     "timeInferredCount": 7,
     "inferenceMethod": "For ENDE entries with no printed clock, estimate using last printed stop 15/4/35 time plus the travel gap from the same line’s earlier terminal trips (Blue +6m; Red +7m; Yellow +8m).",
     "unmarkedContinuation": "Red D5 at 12:00 has P, not a printed colour-change marker. Matching D5 on Blue at 13:00 suggests continuation; inferred and flagged in the sourceNote.",
-    "nightTourNote": "Blue D1 terminal 16:30 has an NT mark in the source. No NT or Mozart event/route is included in this JSON.",
+    "nightTourNote": "Night Tour PDF table: heading S1;D1; Staatsoper (Ankunft) 15:50;16:10, Staatsoper (Abfahrt) 16:30. Show only D1 NT status, at its final regular Blue run and as a 16:30 status event; do not include Night Tour passenger timetable.",
     "departureData": "All 28 stops and every existing regular-line departure time and bus code copied unchanged from supplied timetable (2).json."
   }
 }
