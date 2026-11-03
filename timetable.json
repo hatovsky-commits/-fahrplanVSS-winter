@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "version": 18,
+  "version": 19,
   "published": "2026-11-02T00:00:00Z",
-  "title": "Vienna Sightseeing Winter Fahrplan – Status nur bei Ankunft",
+  "title": "Vienna Sightseeing Winter Fahrplan – Status nur bei Ankunft · H16 Wochenende/Feiertag",
   "validFrom": "2026-11-02",
   "validTo": "2026-12-24",
   "timezone": "Europe/Vienna",
@@ -1018,7 +1018,18 @@
           "R1",
           "D5",
           "D5"
-        ]
+        ],
+        "serviceCalendar": {
+          "weekdays": [
+            6,
+            7
+          ],
+          "additionalDates": [
+            "2026-12-08"
+          ],
+          "label": "Nur Sa/So & Feiertage",
+          "note": "Haltestelle 16 wird nur samstags, sonntags und an gesetzlichen österreichischen Feiertagen bedient."
+        }
       }
     },
     "4": {
@@ -1537,5 +1548,16 @@
     "departureData": "All 28 stops and every existing regular-line departure time and bus code copied unchanged from supplied timetable (2).json.",
     "statusPlacement": "Pause, Farbwechsel, OFF DUTY und NT nur auf den ausdrücklich angegebenen Ankunftsereignissen (Staatsoper Haltestelle 1). Kein Status auf den regulären Abfahrten oder auf der Anschlussfahrt. Bei P/Y und P/B erscheinen Pause und Farbwechsel gemeinsam am Ankunftsereignis.",
     "arrivalOnlyVersion": "v18"
-  }
+  },
+  "stationServiceOverrides": [
+    {
+      "stop": "16",
+      "line": "red",
+      "serviceDays": "Saturday, Sunday and Austrian statutory public holidays",
+      "holidayDates": [
+        "2026-12-08"
+      ],
+      "source": "User-provided operational exception; PDF overall header reads Montag–Sonntag"
+    }
+  ]
 }
