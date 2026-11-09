@@ -112,6 +112,18 @@
     .bottom-nav{position:sticky;bottom:0;background:#081622f2;border-top:1px solid #314a61;padding:7px max(16px,env(safe-area-inset-left)) calc(7px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-right));display:flex;justify-content:center;gap:12px;z-index:10;backdrop-filter:blur(12px)}
     .bottom-nav a{display:inline-flex;justify-content:center;align-items:center;gap:5px;min-width:130px;text-decoration:none;border:1px solid #324b62;border-radius:10px;color:#dbeaf6;padding:9px 14px;font-size:.8rem;font-weight:830;background:#172d42;min-height:44px}
     .hidden{display:none!important}
+    /* Mobile timeline: event text must never get crushed beside a duplicate status chip. */
+    .item-main{flex:1 1 auto;min-width:0}
+    .item.special .item-body{display:block;padding:12px 13px;min-width:0}
+    .item.special .item-main{width:100%;min-width:0}
+    .item.special .item-main b{white-space:normal;word-break:normal;overflow-wrap:break-word;line-height:1.35}
+    .item.special .item-desc,.item.special .item-main .small{word-break:normal;overflow-wrap:break-word;line-height:1.45}
+    @media(max-width:440px){
+      .item{grid-template-columns:56px 15px minmax(0,1fr);gap:6px}
+      .item:not(:last-child)::before{left:63px}
+      .item:not(.special) .item-body{display:block}
+      .item:not(.special) .item-tag{margin-top:7px;max-width:100%}
+    }
     @media(max-width:700px){.driver-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.two{grid-template-columns:1fr}.shell{padding:15px 13px}.select-card,.panel,.schedule-card{padding:16px}.hero{padding:19px}.brand-title{font-size:1rem}.top-inner{padding-inline:13px}.departure-block .time{font-size:2.65rem}}
     @media(max-width:380px){.driver-grid{gap:6px}.driver-button{min-height:59px;font-size:1.05rem}.clock{font-size:1.2rem}.brand-sub{font-size:.65rem}.stop-bubble{width:58px;height:58px}.route-mini{gap:4px;padding-inline:8px}.route-mini strong{font-size:.8rem}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.track>div{transition:none}}
@@ -235,7 +247,7 @@ function renderDuty(m,moment){const upcoming=m.upcomingStatus;const current=m.la
 setText('dutyIcon',typeIcon(e));setText('dutyTitle',typeTitle(e));setText('dutyTime',e.time);let desc=describeEvent(e,rows);if(e===upcoming)desc+=` · In ${dur(e.minute-moment.minute)}.`;if(e.timeInferred)desc+=' ⚠ Schätzung.';setText('dutyDetail',desc)}
 function timelineLine(e){return LINE_NAMES[e.line]||e.line}
 function rowHTML(e,current){const future=e.minute>current+.001;const passed=e.minute<current-.001;const isSpecial=e.kind==='event';const eventText=isSpecial?typeTitle(e):e.name;const status=isSpecial?`${typeIcon(e)} ${eventText}`:`#${e.stop} ${e.name}`;const desc=isSpecial?`${timelineLine(e)} · Ankunft Station ${e.stop}${e.timeInferred?' · geschätzt':''}`:`${timelineLine(e)} · Haltestelle ${e.stop}`;
-const isNow=Math.abs(e.minute-current)<=.7;let css=`item ${isSpecial?'special':''} ${passed?'past':''} ${isNow?'now':''}`;const color=CODE_COLORS[e.line]||'#627d95';const displayTime=isSpecial&&e.timeInferred?'~'+e.time:e.time;let trailing=isSpecial?`<span class="item-tag" style="border-color:${color};color:#f6e4ba">${htmlEscape(typeIcon(e))} ${htmlEscape(typeTitle(e))}</span>`:`<span class="item-tag" style="border-color:${color};color:${color}">${htmlEscape(timelineLine(e))}</span>`;
+const isNow=Math.abs(e.minute-current)<=.7;let css=`item ${isSpecial?'special':''} ${passed?'past':''} ${isNow?'now':''}`;const color=CODE_COLORS[e.line]||'#627d95';const displayTime=isSpecial&&e.timeInferred?'~'+e.time:e.time;let trailing=isSpecial?'':`<span class="item-tag" style="border-color:${color};color:${color}">${htmlEscape(timelineLine(e))}</span>`;
 let more=isSpecial?`<div class="small" style="margin-top:5px">${htmlEscape(describeEvent(e,rows))}</div>`:'';
 return`<div class="${css}" style="--event-color:${color}"><div class="item-time">${htmlEscape(displayTime)}</div><div class="item-dot"></div><div class="item-body"><div class="item-main"><b>${htmlEscape(status)}</b><div class="item-desc">${htmlEscape(desc)}</div>${more}</div>${trailing}</div></div>`}
 function renderTimeline(m,moment,valid){const target=byId('timeline');if(!valid){target.innerHTML='<div class="empty">Für dieses Datum gilt der gewählte Fahrplan nicht.</div>';return}
