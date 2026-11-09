@@ -68,7 +68,7 @@
     .departure-block .time{font-size:2.8rem;font-weight:930;line-height:1;letter-spacing:-.065em;font-variant-numeric:tabular-nums}
     .departure-block .count{color:var(--yellow);font-weight:900;font-size:1.2rem;font-variant-numeric:tabular-nums}
     .event-title{display:flex;align-items:center;gap:9px;margin:10px 0 7px;font-size:1.12rem;font-weight:850}
-    .event-icon{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#24415a;font-size:20px}
+    .event-icon{display:inline-flex;align-items:center;justify-content:center;width:58px;min-width:58px;height:38px;white-space:nowrap;border-radius:12px;background:#24415a;font-size:18px}
     .event-time{font-variant-numeric:tabular-nums;font-weight:900;color:var(--yellow);font-size:1.6rem;letter-spacing:-.035em}
     .small{font-size:.78rem;color:var(--muted);line-height:1.5}
     .inline-info{display:inline-flex;align-items:center;gap:6px;color:#c6ddec;font-weight:740;font-size:.8rem;margin-top:11px}
@@ -76,6 +76,15 @@
     .schedule-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
     .schedule-head h2{font-size:1.16rem;font-weight:880;margin:0;letter-spacing:-.02em}
     .toggle{border:1px solid #405c75;background:#172e43;color:#e2edf7;border-radius:10px;padding:10px 12px;font-size:.78rem;font-weight:780;min-height:44px}
+    .schedule-events{display:grid;gap:7px;margin:10px 0 15px}
+    .schedule-event{display:grid;grid-template-columns:61px minmax(0,1fr);align-items:center;gap:8px;padding:10px 12px;background:color-mix(in srgb,var(--status-col),#132539 92%);border:1px solid color-mix(in srgb,var(--status-col),#40536b 55%);border-left:4px solid var(--status-col);border-radius:11px}
+    .schedule-event-time{font-size:1rem;color:var(--status-col);font-weight:930;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .schedule-event-copy{min-width:0}
+    .schedule-event-copy strong{display:block;font-size:.86rem;line-height:1.3;color:#f0f7ff;overflow-wrap:anywhere}
+    .schedule-event-copy small{display:block;color:#b8cbd9;font-size:.73rem;margin-top:3px;line-height:1.35}
+    .item.special .item-body{padding:9px 7px;border-left:3px solid var(--event-color);background:color-mix(in srgb,var(--event-color),#172738 91%);border-radius:9px}
+    .item.special .item-main b{color:#ffffff;font-weight:920}
+    .item.special .item-time{color:#f6d888}
     .timeline{padding:5px 0 0}
     .item{display:grid;grid-template-columns:63px 21px minmax(0,1fr);gap:7px;min-height:62px;position:relative}
     .item:not(:last-child)::before{content:'';position:absolute;top:20px;bottom:-1px;width:2px;left:72px;background:#344e65}
@@ -153,6 +162,7 @@
     </div>
     <section class="card schedule-card" id="scheduleSection" aria-label="Dienstablauf">
       <div class="schedule-head"><div><h2>Dein Tagesablauf</h2><div class="small" id="scheduleSubtitle" style="margin-top:4px"></div></div><button type="button" id="toggleFull" class="toggle" aria-pressed="false">Ganzer Dienst</button></div>
+      <div class="schedule-events" id="scheduleEvents" aria-label="Pausen, Linienwechsel und Dienstende"></div>
       <div class="timeline" id="timeline"></div>
     </section>
   </div>
@@ -191,8 +201,8 @@ for(const event of data.planEvents||[]){if(event.vehicleCode!==code)continue;con
 // The status marker belongs to arrival (Ankunft), never to the next departure.
 r.sort((a,b)=>a.minute-b.minute|| (a.kind==='event'?-1:1)||(a.uid-b.uid));
 return r}
-function typeTitle(e){if(!e)return'';if(e.type==='pause'||e.type==='pause_bus_change')return'PAUSE';if(e.type==='end_duty')return'OFF DUTY';if(e.type==='colour_change')return'LINIENWECHSEL';if(e.type==='night_tour')return'NT · NIGHT TOUR';return e.marker||'DIENSTHINWEIS'}
-function typeIcon(e){if(!e)return'ℹ';if(e.type==='pause'||e.type==='pause_bus_change')return'☕';if(e.type==='end_duty')return'⏹';if(e.type==='colour_change')return'⇄';if(e.type==='night_tour')return'☾';return'ℹ'}
+function typeTitle(e){if(!e)return'';if((e.type==='pause'||e.type==='pause_bus_change')&&e.continuation?.line&&e.continuation.line!==e.line)return'PAUSE + LINIENWECHSEL';if(e.type==='pause'||e.type==='pause_bus_change')return'PAUSE';if(e.type==='end_duty')return'OFF DUTY';if(e.type==='colour_change')return'LINIENWECHSEL';if(e.type==='night_tour')return'NT · NIGHT TOUR';return e.marker||'DIENSTHINWEIS'}
+function typeIcon(e){if(!e)return'ℹ';if((e.type==='pause'||e.type==='pause_bus_change')&&e.continuation?.line&&e.continuation.line!==e.line)return'☕ ⇄';if(e.type==='pause'||e.type==='pause_bus_change')return'☕';if(e.type==='end_duty')return'⏹';if(e.type==='colour_change')return'⇄';if(e.type==='night_tour')return'☾';return'ℹ'}
 function findNextDeparture(events,at){return events.find(x=>x.kind==='stop'&&x.minute>at.minute+.001)}
 function describeEvent(e,events){if(!e)return'';const target=e.continuation;const next=target?`${LINE_NAMES[target.line]||target.line} ${target.time}`:'';const inferred=e.timeInferred?' · Ankunftszeit geschätzt':'';
 if(e.type==='night_tour')return`D1 wechselt nach der Ankunft um ${e.time} zum Night Tour Dienst (Abfahrt ${e.nightTourDeparture||'unbekannt'}). Keine reguläre Linienabfahrt.`;
@@ -232,10 +242,36 @@ function renderDuty(m,moment){const upcoming=m.upcomingStatus;const current=m.la
 setText('dutyIcon',typeIcon(e));setText('dutyTitle',typeTitle(e));setText('dutyTime',e.time);let desc=describeEvent(e,rows);if(e===upcoming)desc+=` · In ${dur(e.minute-moment.minute)}.`;if(e.timeInferred)desc+=' ⚠ Schätzung.';setText('dutyDetail',desc)}
 function timelineLine(e){return LINE_NAMES[e.line]||e.line}
 function rowHTML(e,current){const future=e.minute>current+.001;const passed=e.minute<current-.001;const isSpecial=e.kind==='event';const eventText=isSpecial?typeTitle(e):e.name;const status=isSpecial?`${typeIcon(e)} ${eventText}`:`#${e.stop} ${e.name}`;const desc=isSpecial?`${timelineLine(e)} · Ankunft Station ${e.stop}${e.timeInferred?' · geschätzt':''}`:`${timelineLine(e)} · Haltestelle ${e.stop}`;
-const isNow=Math.abs(e.minute-current)<=.7;let css=`item ${isSpecial?'special':''} ${passed?'past':''} ${isNow?'now':''}`;const color=CODE_COLORS[e.line]||'#627d95';const displayTime=isSpecial&&e.timeInferred?'~'+e.time:e.time;let trailing=isSpecial?`<span class="item-tag" style="border-color:${color};color:#f6e4ba">${htmlEscape(typeIcon(e))} ${htmlEscape(e.marker||'STATUS')}</span>`:`<span class="item-tag" style="border-color:${color};color:${color}">${htmlEscape(timelineLine(e))}</span>`;
+const isNow=Math.abs(e.minute-current)<=.7;let css=`item ${isSpecial?'special':''} ${passed?'past':''} ${isNow?'now':''}`;const color=CODE_COLORS[e.line]||'#627d95';const displayTime=isSpecial&&e.timeInferred?'~'+e.time:e.time;let trailing=isSpecial?`<span class="item-tag" style="border-color:${color};color:#f6e4ba">${htmlEscape(typeIcon(e))} ${htmlEscape(typeTitle(e))}</span>`:`<span class="item-tag" style="border-color:${color};color:${color}">${htmlEscape(timelineLine(e))}</span>`;
 let more=isSpecial?`<div class="small" style="margin-top:5px">${htmlEscape(describeEvent(e,rows))}</div>`:'';
 return`<div class="${css}" style="--event-color:${color}"><div class="item-time">${htmlEscape(displayTime)}</div><div class="item-dot"></div><div class="item-body"><div class="item-main"><b>${htmlEscape(status)}</b><div class="item-desc">${htmlEscape(desc)}</div>${more}</div>${trailing}</div></div>`}
-function renderTimeline(m,moment,valid){const target=byId('timeline');if(!valid){target.innerHTML='<div class="empty">Für dieses Datum gilt der gewählte Fahrplan nicht.</div>';return}
+function eventOverviewText(e){
+ const place=`Ankunft #${e.stop} · ${LINE_NAMES[e.line]||e.line}`;
+ const target=e.continuation;
+ if(e.type==='end_duty')return `${place}${e.timeInferred?' · Zeit geschätzt':''}`;
+ if(e.type==='night_tour')return `${place} · Night Tour ab ${e.nightTourDeparture||'–'}`;
+ if(e.type==='colour_change')return `${place} → ${LINE_NAMES[target?.line]||'?'}${target?.time?' · ab '+target.time:''}`;
+ if(e.type==='pause'||e.type==='pause_bus_change'){
+   const departure=target||findNextDeparture(rows,e);
+   const elapsed=departure&&mins(departure.time)>e.minute?` · Pause ${dur(mins(departure.time)-e.minute)}`:'';
+   const switched=target?.line&&target.line!==e.line?` · danach ${LINE_NAMES[target.line]||target.line} ab ${target.time}`:'';
+   const inferred=switched&&/inferred/i.test(e.sourceNote||'')?' (Linienwechsel abgeleitet)':'';
+   return place+elapsed+switched+inferred;
+ }
+ return place;
+}
+function renderEventOverview(valid){
+ const target=byId('scheduleEvents');
+ if(!valid){target.innerHTML='';return}
+ const events=rows.filter(e=>e.kind==='event');
+ if(!events.length){target.innerHTML='<div class="small">Keine besonderen Diensthinweise in diesem Fahrplan.</div>';return}
+ target.innerHTML=events.map(e=>{
+   const col=CODE_COLORS[e.line]||'#ffd35b';
+   const clock=(e.timeInferred?'~':'')+e.time;
+   return `<div class="schedule-event" style="--status-col:${col}"><div class="schedule-event-time">${htmlEscape(clock)}</div><div class="schedule-event-copy"><strong>${htmlEscape(typeIcon(e))} ${htmlEscape(typeTitle(e))}</strong><small>${htmlEscape(eventOverviewText(e))}</small></div></div>`;
+ }).join('');
+}
+function renderTimeline(m,moment,valid){renderEventOverview(valid);const target=byId('timeline');if(!valid){target.innerHTML='<div class="empty">Für dieses Datum gilt der gewählte Fahrplan nicht.</div>';return}
 if(!rows.length){target.innerHTML='<div class="empty">Keine Fahrten für diesen Fahrzeugcode.</div>';return}
 let list=rows;
 if(!showFull){let idx=rows.findIndex(e=>e.minute>=moment.minute-.001);if(idx<0)idx=rows.length;list=rows.slice(Math.max(0,idx-4),Math.min(rows.length,idx+14));}
